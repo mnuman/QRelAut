@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gre="http://xmlns.qualogy.com/internalgreeting/xsd"
+            targetNamespace="http://xmlns.qualogy.com/internalgreeting/xsd" elementFormDefault="qualified">
+  <xsd:element name="Greeting" type="gre:GreetingType"/>
+  <xsd:element name="GreetName" type="gre:NameType"/>
+  <xsd:simpleType name="NameType">
+    <xsd:restriction base="xsd:string"/></xsd:simpleType>
+  <xsd:simpleType name="GreetingType">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+</xsd:schema>

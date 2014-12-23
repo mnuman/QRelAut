@@ -1,0 +1,15 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<wsdl:definitions
+    
+     targetNamespace="urn:AbstractInternalGreetingService.wsdl"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:bpws="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     xmlns:tns="urn:AbstractInternalGreetingService.wsdl"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+    <plnk:partnerLinkType name="SOAInternalGreeterBPELletje">
+        <plnk:role name="InternalGreetingPort" portType="tns:InternalGreetingPort"/>
+    </plnk:partnerLinkType>
+    <wsdl:import namespace="urn:AbstractInternalGreetingService.wsdl" location="oramds:/apps/wsdl/InternalGreetingService.wsdl"/>
+</wsdl:definitions>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="http://qualogy.com/wsdl/greeting" xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://qualogy.com/wsdl/greeting"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:typ="http://xmlns.qualogy.com/greeting/xsd"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">             
+  <message name="GreetingRequestMessage">
+    <part name="in" element="typ:PersonName"/>
+  </message>
+  <message name="GreetingResponseMessage">
+    <part name="return" element="typ:Greeting"/>
+  </message>
+  <portType name="GreetingPort">
+    <operation name="greet">
+      <input message="tns:GreetingRequestMessage"/>
+      <output message="tns:GreetingResponseMessage"/>
+    </operation>
+  </portType>
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://xmlns.qualogy.com/greeting/xsd" schemaLocation="../xsd/GreetingService.xsd"/>
+    </xsd:schema>
+  </types>
+  <binding name="GreetingPortSOAP11Binding" type="tns:GreetingPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="greet">
+      <soap:operation style="document" soapAction="http://qualogy.com/wsdl/greeting/greet"/>
+      <input>
+        <soap:body use="literal" parts="in"/>
+      </input>
+      <output>
+        <soap:body use="literal" parts="return"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="GreetingPortSOAP12Binding" type="tns:GreetingPort">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="greet">
+      <soap12:operation style="document" soapAction="http://qualogy.com/wsdl/greeting/greet"/>
+      <input>
+        <soap12:body use="literal" parts="in"/>
+      </input>
+      <output>
+        <soap12:body use="literal" parts="return"/>
+      </output>
+    </operation>
+  </binding>
+</definitions>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="urn:AbstractInternalGreetingService.wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="urn:AbstractInternalGreetingService.wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xqcix="http://xmlns.qualogy.com/internalgreeting/xsd">
+  <types>
+    <xsd:schema targetNamespace="urn:AbstractInternalGreetingService.wsdl/types" elementFormDefault="qualified"/>
+    <xsd:schema>
+      <xsd:import schemaLocation="../xsd/InternalGreeting.xsd"
+                  namespace="http://xmlns.qualogy.com/internalgreeting/xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="InternalGreetingRequest">
+    <part name="in" element="xqcix:GreetName"/>
+  </message>
+  <message name="InternalGreetingResponse">
+    <part name="return" element="xqcix:Greeting"/>
+  </message>
+  <portType name="InternalGreetingPort">
+    <operation name="InternalGreet">
+      <input message="tns:InternalGreetingRequest"/>
+      <output message="tns:InternalGreetingResponse"/>
+    </operation>
+  </portType>
+  <binding name="InternalGreetingPortSOAP11Binding" type="tns:InternalGreetingPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="InternalGreet">
+      <soap:operation style="document" soapAction="urn:AbstractInternalGreetingService.wsdl/InternalGreet"/>
+      <input>
+        <soap:body use="literal" parts="in"/>
+      </input>
+      <output>
+        <soap:body use="literal" parts="return"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="InternalGreetingPortSOAP12Binding" type="tns:InternalGreetingPort">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="InternalGreet">
+      <soap12:operation style="document" soapAction="urn:AbstractInternalGreetingService.wsdl/InternalGreet"/>
+      <input>
+        <soap12:body use="literal" parts="in"/>
+      </input>
+      <output>
+        <soap12:body use="literal" parts="return"/>
+      </output>
+    </operation>
+  </binding>
+</definitions>

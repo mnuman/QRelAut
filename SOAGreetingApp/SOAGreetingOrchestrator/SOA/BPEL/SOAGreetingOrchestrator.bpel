@@ -1,0 +1,98 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Tue Dec 23 09:11:04 CET 2014
+  Author:  milco
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="SOAGreetingOrchestrator"
+               targetNamespace="http://xmlns.oracle.com/SOAGreetingApp/SOAGreetingOrchestrator/SOAGreetingOrchestrator"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/SOAGreetingApp/SOAGreetingOrchestrator/SOAGreetingOrchestrator"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:ns1="http://qualogy.com/wsdl/greeting"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer" xmlns:ns2="urn:AbstractInternalGreetingService.wsdl"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions" xmlns:ess="http://xmlns.oracle.com/scheduler"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ns3="http://xmlns.qualogy.com/greeting/xsd"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns4="http://xmlns.qualogy.com/internalgreeting/xsd">
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <import namespace="http://qualogy.com/wsdl/greeting" location="../WSDLs/GreetingServiceWrapper.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/" ui:processWSDL="true"/>
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="soagreetingorchestrator_client" partnerLinkType="ns1:SOAGreetingOrchestrator" myRole="GreetingPort"/>
+    <partnerLink name="InternalGreeterRef" partnerLinkType="ns2:SOAInternalGreeterBPELletje"
+                 partnerRole="InternalGreetingPort"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="ns1:GreetingRequestMessage"/>
+
+    <!-- Reference to the message that will be returned to the requester-->
+    <variable name="outputVariable" messageType="ns1:GreetingResponseMessage"/>
+    <variable name="callInternalGreeter_InternalGreet_InputVariable" messageType="ns2:InternalGreetingRequest"/>
+    <variable name="callInternalGreeter_InternalGreet_OutputVariable" messageType="ns2:InternalGreetingResponse"/>
+  </variables>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in SOAGreetingOrchestrator.wsdl) -->
+    <receive name="receiveInput" partnerLink="soagreetingorchestrator_client" portType="ns1:GreetingPort" operation="greet" variable="inputVariable" createInstance="yes"/>
+    <assign name="assignRequestMessage">
+      <copy>
+        <from>concat($inputVariable.in/ns3:FirstName, ' ', $inputVariable.in/ns3:LastName)</from>
+        <to>$callInternalGreeter_InternalGreet_InputVariable.in</to>
+      </copy>
+    </assign>
+    <invoke name="callInternalGreeter" bpelx:invokeAsDetail="no" partnerLink="InternalGreeterRef"
+            portType="ns2:InternalGreetingPort" operation="InternalGreet"
+            inputVariable="callInternalGreeter_InternalGreet_InputVariable"
+            outputVariable="callInternalGreeter_InternalGreet_OutputVariable"/>
+    <assign name="assginResponse">
+      <copy>
+        <from>$callInternalGreeter_InternalGreet_OutputVariable.return</from>
+        <to>$outputVariable.return</to>
+      </copy>
+    </assign>
+    <!-- Generate reply to synchronous request -->
+    <reply name="replyOutput" partnerLink="soagreetingorchestrator_client" portType="ns1:GreetingPort" operation="greet" variable="outputVariable"/>
+  </sequence>
+</process>

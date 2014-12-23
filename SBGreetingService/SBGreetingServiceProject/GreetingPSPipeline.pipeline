@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/logging/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config" xmlns:con3="http://www.bea.com/wli/sb/stages/transform/config">
+    <con:coreEntry>
+        <con:binding type="SOAP" isSoap12="false" xsi:type="con:SoapBindingType">
+            <con:wsdl ref="SBGreetingServiceProject/GreetingService"/>
+            <con:binding>
+                <con:name>GreetingPortSOAP11Binding</con:name>
+                <con:namespace>http://qualogy.com/wsdl/greeting</con:namespace>
+            </con:binding>
+        </con:binding>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:pipeline type="request" name="request-7f000101.N8f0f443.0.14a738abd79.N7fce">
+            <con:stage id="_StageId-7f000101.N8f0f443.0.14a738abd79.N7fcc" name="Stage1">
+                <con:context/>
+                <con:actions/>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-7f000101.N8f0f443.0.14a738abd79.N7fcd">
+            <con:stage id="_StageId-7f000101.N8f0f443.0.14a738abd79.N7fcb" name="Stage1">
+                <con:context>
+                    <con2:userNsDecl prefix="xsd1" namespace="http://xmlns.qualogy.com/greeting/xsd"/>
+                </con:context>
+                <con:actions>
+                    <con3:replace varName="body" contents-only="true">
+                        <con2:id>_ActionId-7f000101.N28b3683d.0.14a75f437fe.N7ffe</con2:id>
+                        <con3:expr>
+                            <con2:xqueryTransform>
+                                <con2:resource ref="SBGreetingServiceProject/DummyMapping"/>
+                                <con2:param name="pn">
+                                    <con2:path>$body/xsd1:PersonName</con2:path>
+                                </con2:param>
+                            </con2:xqueryTransform>
+                        </con3:expr>
+                    </con3:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:flow>
+            <con:pipeline-node name="PP_GreetingPS">
+                <con:request>request-7f000101.N8f0f443.0.14a738abd79.N7fce</con:request>
+                <con:response>response-7f000101.N8f0f443.0.14a738abd79.N7fcd</con:response>
+            </con:pipeline-node>
+        </con:flow>
+    </con:router>
+</con:pipelineEntry>

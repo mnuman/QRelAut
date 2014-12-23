@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gre="http://xmlns.qualogy.com/greeting/xsd" targetNamespace="http://xmlns.qualogy.com/greeting/xsd" elementFormDefault="qualified">
+<xsd:element name="PersonName" type="gre:PersonNameType">
+<xsd:annotation>
+<xsd:documentation>A sample element</xsd:documentation>
+</xsd:annotation>
+</xsd:element>
+<xsd:element name="Greeting" type="gre:GreetingType"/>
+<xsd:simpleType name="NameType">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="50"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="PersonNameType">
+<xsd:sequence>
+<xsd:element name="FirstName" type="gre:NameType"/>
+<xsd:element name="LastName" type="gre:NameType"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:simpleType name="GreetingType">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="200"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:schema>
