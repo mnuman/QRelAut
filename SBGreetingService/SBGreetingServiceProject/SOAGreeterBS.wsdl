@@ -1,0 +1,14 @@
+<wsdl:definitions targetNamespace="http://qualogy.com/wsdl/greeting" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bpws="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:tns="http://qualogy.com/wsdl/greeting" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+    <wsdl:documentation>
+        <abstractWSDL>http://soa2admin2.example.com:8001/soa-infra/services/default/SOAGreeter!1.0/WSDLs/GreetingServiceWrapper.wsdl</abstractWSDL>
+    </wsdl:documentation>
+    <plnk:partnerLinkType name="SOAGreeterBPEL">
+        <plnk:role name="GreetingPort" portType="tns:GreetingPort"/>
+    </plnk:partnerLinkType>
+    <wsdl:import namespace="http://qualogy.com/wsdl/greeting" location="WSDL_1219889837.wsdl"/>
+    <wsdl:service name="soagreeterbpel_client_ep">
+        <wsdl:port name="GreetingPort_pt" binding="tns:GreetingPortSOAP11Binding">
+            <soap:address location="http://soa2admin2.example.com:8001/soa-infra/services/default/SOAGreeter/soagreeterbpel_client_ep"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
